@@ -4,6 +4,7 @@ import Icon from "react-native-vector-icons/Ionicons"
 import CircularProgress from "react-native-circular-progress-indicator"
 import { Audio } from "expo-av"
 import { COLORS } from "../constants"
+import { useNavigation } from "@react-navigation/native"
 
 const editTime = (time) => {
   const seconds = (time % 60).toString()
@@ -26,6 +27,7 @@ const CURRENT_COLOR_THEME = COLORS.red
 const HomeScreen = () => {
   const [timer, setTimer] = useState(false)
   const [time, setTime] = useState(TIME)
+  const navigation = useNavigation()
 
   const handleModeChange = (time) => {
     setTime(time)
@@ -74,10 +76,11 @@ const HomeScreen = () => {
       style={{
         alignItems: "center",
         justifyContent: "space-between",
-        height: "100%",
+        // height: "100%",
+        flex: 1,
       }}
     >
-      <Header />
+      <Header navigation={navigation} />
       <Body
         timer={timer}
         time={time}
@@ -236,7 +239,7 @@ const Body = ({ timer, time, startTimer, stopTimer, resetTimer }) => (
   </View>
 )
 
-const Header = () => (
+const Header = ({ navigation }) => (
   <View
     style={{
       width: "100%",
@@ -259,7 +262,12 @@ const Header = () => (
       POMODORO
     </Text>
 
-    <TouchableOpacity activeOpacity={0.5}>
+    <TouchableOpacity
+      activeOpacity={0.5}
+      onPress={() => {
+        navigation.navigate("SettingsScreen")
+      }}
+    >
       <Icon
         name="settings-outline"
         size={25}

@@ -1,6 +1,3 @@
-import { StatusBar } from "expo-status-bar"
-import { StyleSheet, Text, View } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
 import {
   useFonts,
   Poppins_400Regular,
@@ -11,6 +8,7 @@ import {
 
 import HomeScreen from "./screens/HomeScreen"
 import SettingsScreen from "./screens/SettingsScreen"
+import Navigation from "./navigation"
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -22,18 +20,5 @@ export default function App() {
 
   if (!fontsLoaded) return null
 
-  return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <SafeAreaView>
-        <HomeScreen />
-      </SafeAreaView>
-    </View>
-  )
+  return <Navigation />
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-})
