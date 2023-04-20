@@ -8,6 +8,9 @@ import {
 
 import Navigation from "./navigation"
 import { StatusBar } from "expo-status-bar"
+import { Provider } from "react-redux"
+
+import { store } from "./store/store"
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -20,8 +23,8 @@ export default function App() {
   if (!fontsLoaded) return null
 
   return (
-    <>
+    <Provider store={store}>
       <Navigation />
-    </>
+    </Provider>
   )
 }

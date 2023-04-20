@@ -6,6 +6,8 @@ import CircularProgress from "react-native-circular-progress-indicator"
 import { Audio } from "expo-av"
 import { COLORS } from "../constants"
 import { useNavigation } from "@react-navigation/native"
+import { useSelector } from "react-redux"
+import { useFocusEffect } from "@react-navigation/native"
 
 const editTime = (time) => {
   const seconds = (time % 60).toString()
@@ -20,15 +22,24 @@ const getPercent = (time, capacity) => {
   return parseInt((time / capacity) * 100)
 }
 
-const FOCUS = 10 * 60
-const BREAK = 1 * 60
+let FOCUS = 25 * 60
+let BREAK = 5 * 60
 let TIME = FOCUS
-const CURRENT_COLOR_THEME = COLORS.dark
+let CURRENT_COLOR_THEME = COLORS.dark
 
 const HomeScreen = () => {
+  const data = useSelector((state) => state)
+
+  FOCUS = data.focus
+  BREAK = data.break
+
   const [timer, setTimer] = useState(false)
   const [time, setTime] = useState(TIME)
   const navigation = useNavigation()
+
+  console.log(data)
+
+  CURRENT_COLOR_THEME = data.color
 
   const handleModeChange = (time) => {
     setTime(time)

@@ -1,57 +1,173 @@
-import { View, Text, TouchableOpacity, TextInput } from "react-native"
-import React from "react"
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  Keyboard,
+  Dimensions,
+  Pressable,
+} from "react-native"
+import React, { useEffect, useRef, useState } from "react"
 import Icon from "react-native-vector-icons/Ionicons"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { COLORS } from "../constants"
 import { useNavigation } from "@react-navigation/native"
+import { useSelector, useDispatch } from "react-redux"
+import { update } from "../store/actions"
 
-const CURRENT_COLOR_THEME = COLORS.dark
+let CURRENT_COLOR_THEME = COLORS.dark
+let FOCUS, BREAK
 
 const SettingsScreen = () => {
+  const data = useSelector((state) => state)
+  const dispatch = useDispatch()
+
+  const [_focus, setFocus] = useState("")
+  const [_break, setBreak] = useState("")
+
   const navigation = useNavigation()
+
+  CURRENT_COLOR_THEME = data.color
+  FOCUS = data.focus / 60
+  BREAK = data.break / 60
+
+  const updateTimer = () => {
+    if (_focus != "0" && _break != "0") {
+      dispatch(
+        update({
+          focus: _focus.length ? parseInt(_focus) * 60 : FOCUS * 60,
+          break: _break.length ? parseInt(_break) * 60 : BREAK * 60,
+        })
+      )
+    }
+    Keyboard.dismiss()
+
+    setFocus("")
+    setBreak("")
+  }
 
   return (
     <SafeAreaView>
       <Header navigation={navigation} />
-      <Body />
+      <Body
+        updateTimer={updateTimer}
+        setFocus={(value) => setFocus(value)}
+        setBreak={(value) => setBreak(value)}
+        _break={_break}
+        _focus={_focus}
+      />
     </SafeAreaView>
   )
 }
 
-const Body = () => (
-  <View style={{ paddingHorizontal: 20, marginTop: 10 }}>
-    <InputField name="Fokus" />
-    <InputField name="Fasilə" />
+const Body = ({ updateTimer, setFocus, setBreak, _focus, _break }) => {
+  const DISABLED = !(_focus.length || _break.length)
 
+  return (
+    <View style={{ paddingHorizontal: 20, marginTop: 10 }}>
+      <InputField
+        name="Fokus"
+        placeholder={FOCUS}
+        onChange={setFocus}
+        value={_focus}
+      />
+      <InputField
+        name="Fasilə"
+        placeholder={BREAK}
+        onChange={setBreak}
+        value={_break}
+      />
+
+      <Pressable
+        disabled={DISABLED}
+        onPress={() => updateTimer()}
+        activeOpacity={0.9}
+        style={{
+          paddingHorizontal: 20,
+          opacity: DISABLED ? 0.5 : 1,
+          paddingVertical: 10,
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "visible",
+          borderRadius: 10,
+          shadowColor: COLORS.gray,
+          backgroundColor: CURRENT_COLOR_THEME,
+          elevation: 10,
+          marginVertical: 5,
+        }}
+      >
+        <Text
+          style={{
+            fontFamily: "Poppins_500Medium",
+            color: COLORS.white,
+            fontSize: 16,
+          }}
+        >
+          Yadda Saxla
+        </Text>
+      </Pressable>
+
+      <View>
+        <Text
+          style={{
+            marginTop: 30,
+            marginBottom: 20,
+            fontSize: 20,
+            color: COLORS.dark,
+            fontFamily: "Poppins_500Medium",
+            textAlign: "center",
+          }}
+        >
+          Rəng Sxemi
+        </Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginVertical: 10,
+          }}
+        >
+          <Color color={COLORS.red} />
+          <Color color={COLORS.green} />
+          <Color color={COLORS.orange} />
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginVertical: 10,
+          }}
+        >
+          <Color color={COLORS.dark} />
+          <Color color={COLORS.blue} />
+          <Color color={COLORS.purple} />
+        </View>
+      </View>
+    </View>
+  )
+}
+
+const Color = ({ color }) => {
+  const dispatch = useDispatch()
+
+  return (
     <TouchableOpacity
-      activeOpacity={0.9}
+      onPress={() => dispatch(update({ color: color }))}
+      activeOpacity={1}
       style={{
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        alignItems: "center",
-        justifyContent: "center",
+        width: 70,
+        height: 70,
         overflow: "visible",
         borderRadius: 10,
         shadowColor: COLORS.gray,
-        backgroundColor: CURRENT_COLOR_THEME,
-        elevation: 10,
-        marginVertical: 5,
+        backgroundColor: color,
+        elevation: 2,
       }}
-    >
-      <Text
-        style={{
-          fontFamily: "Poppins_500Medium",
-          color: COLORS.white,
-          fontSize: 16,
-        }}
-      >
-        Yadda Saxla
-      </Text>
-    </TouchableOpacity>
-  </View>
-)
+    />
+  )
+}
 
-const InputField = ({ name }) => (
+const InputField = ({ name, placeholder, onChange, value }) => (
   <View
     style={{
       alignItems: "center",
@@ -77,7 +193,12 @@ const InputField = ({ name }) => (
       {name}
     </Text>
     <TextInput
-      placeholder="25"
+      onSubmitEditing={Keyboard.dismiss}
+      onChangeText={(value) => onChange(value)}
+      placeholder={placeholder.toString()}
+      value={value}
+      keyboardType="numeric"
+      maxLength={2}
       style={{
         borderWidth: 1,
         borderColor: COLORS.light,
