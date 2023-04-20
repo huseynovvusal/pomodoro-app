@@ -6,9 +6,8 @@ import {
   Poppins_700Bold,
 } from "@expo-google-fonts/poppins"
 
-import HomeScreen from "./screens/HomeScreen"
-import SettingsScreen from "./screens/SettingsScreen"
 import Navigation from "./navigation"
+import { StatusBar } from "expo-status-bar"
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -20,5 +19,9 @@ export default function App() {
 
   if (!fontsLoaded) return null
 
-  return <Navigation />
+  return (
+    <>
+      <Navigation />
+    </>
+  )
 }

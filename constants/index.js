@@ -9,4 +9,5 @@ export const COLORS = {
   white: "#fff",
   purple: "#c01bd6",
   orange: "#f4ab18",
+  light: "#eee",
 }

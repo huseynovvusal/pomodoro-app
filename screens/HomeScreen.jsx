@@ -1,4 +1,5 @@
 import { View, Text, TouchableOpacity } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
 import React, { useEffect, useState } from "react"
 import Icon from "react-native-vector-icons/Ionicons"
 import CircularProgress from "react-native-circular-progress-indicator"
@@ -22,7 +23,7 @@ const getPercent = (time, capacity) => {
 const FOCUS = 10 * 60
 const BREAK = 1 * 60
 let TIME = FOCUS
-const CURRENT_COLOR_THEME = COLORS.red
+const CURRENT_COLOR_THEME = COLORS.dark
 
 const HomeScreen = () => {
   const [timer, setTimer] = useState(false)
@@ -72,15 +73,15 @@ const HomeScreen = () => {
   })
 
   return (
-    <View
+    <SafeAreaView
       style={{
         alignItems: "center",
         justifyContent: "space-between",
-        // height: "100%",
         flex: 1,
+        backgroundColor: COLORS.light,
       }}
     >
-      <Header navigation={navigation} />
+      <Header navigation={navigation} timer={timer} />
       <Body
         timer={timer}
         time={time}
@@ -89,7 +90,7 @@ const HomeScreen = () => {
         resetTimer={resetTimer}
       />
       <Footer timer={timer} handleModeChange={handleModeChange} />
-    </View>
+    </SafeAreaView>
   )
 }
 
@@ -168,7 +169,8 @@ const Body = ({ timer, time, startTimer, stopTimer, resetTimer }) => (
         activeStrokeColor={CURRENT_COLOR_THEME}
         activeStrokeWidth={3}
         inActiveStrokeWidth={10}
-        inActiveStrokeColor={COLORS.divider}
+        inActiveStrokeColor={COLORS.gray}
+        inActiveStrokeOpacity={0.1}
         maxValue={100}
         showProgressValue={false}
       />
@@ -239,7 +241,7 @@ const Body = ({ timer, time, startTimer, stopTimer, resetTimer }) => (
   </View>
 )
 
-const Header = ({ navigation }) => (
+const Header = ({ navigation, timer }) => (
   <View
     style={{
       width: "100%",
@@ -263,9 +265,9 @@ const Header = ({ navigation }) => (
     </Text>
 
     <TouchableOpacity
-      activeOpacity={0.5}
+      activeOpacity={1}
       onPress={() => {
-        navigation.navigate("SettingsScreen")
+        !timer && navigation.navigate("SettingsScreen")
       }}
     >
       <Icon
