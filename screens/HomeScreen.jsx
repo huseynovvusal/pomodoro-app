@@ -7,7 +7,6 @@ import { Audio } from "expo-av"
 import { COLORS } from "../constants"
 import { useNavigation } from "@react-navigation/native"
 import { useSelector } from "react-redux"
-import { useFocusEffect } from "@react-navigation/native"
 
 const editTime = (time) => {
   const seconds = (time % 60).toString()
@@ -30,14 +29,16 @@ let CURRENT_COLOR_THEME = COLORS.dark
 const HomeScreen = () => {
   const data = useSelector((state) => state)
 
-  FOCUS = data.focus
-  BREAK = data.break
+  useEffect(() => {
+    FOCUS = data.focus
+    BREAK = data.break
+    TIME = FOCUS
+    setTime(TIME)
+  }, [data])
 
   const [timer, setTimer] = useState(false)
   const [time, setTime] = useState(TIME)
   const navigation = useNavigation()
-
-  console.log(data)
 
   CURRENT_COLOR_THEME = data.color
 
