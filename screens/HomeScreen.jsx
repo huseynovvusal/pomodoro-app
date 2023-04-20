@@ -18,7 +18,7 @@ const editTime = (time) => {
 }
 
 const getPercent = (time, capacity) => {
-  return parseInt((time / capacity) * 100)
+  return (time / capacity) * 100
 }
 
 let FOCUS = 25 * 60
@@ -28,11 +28,12 @@ let CURRENT_COLOR_THEME = COLORS.dark
 
 const HomeScreen = () => {
   const data = useSelector((state) => state)
+  const [mode, setMode] = useState(1)
 
   useEffect(() => {
     FOCUS = data.focus
     BREAK = data.break
-    TIME = FOCUS
+    TIME = mode ? FOCUS : BREAK
     setTime(TIME)
   }, [data])
 
@@ -42,8 +43,12 @@ const HomeScreen = () => {
 
   CURRENT_COLOR_THEME = data.color
 
-  const handleModeChange = (time) => {
-    setTime(time)
+  const handleModeChange = (mode) => {
+    if (!timer) {
+      TIME = mode ? FOCUS : BREAK
+      setTime(TIME)
+      setMode(mode)
+    }
   }
 
   const startTimer = () => {
@@ -101,35 +106,20 @@ const HomeScreen = () => {
         stopTimer={stopTimer}
         resetTimer={resetTimer}
       />
-      <Footer timer={timer} handleModeChange={handleModeChange} />
+      <Footer timer={timer} mode={mode} handleModeChange={handleModeChange} />
     </SafeAreaView>
   )
 }
 
-const Footer = ({ timer, handleModeChange }) => {
+const Footer = ({ timer, handleModeChange, mode }) => {
   // 1 = Focus
   // 0 = Break
-
-  const [mode, setMode] = useState(1)
-
-  const handlePress = (m) => {
-    if (!timer) {
-      if (m == 1) {
-        TIME = FOCUS
-        handleModeChange(FOCUS)
-      } else {
-        TIME = BREAK
-        handleModeChange(BREAK)
-      }
-      setMode(m)
-    }
-  }
 
   return (
     <View style={{ marginVertical: 30, flexDirection: "row" }}>
       <TouchableOpacity
         activeOpacity={1}
-        onPress={() => handlePress(1)}
+        onPress={() => handleModeChange(1)}
         style={{
           backgroundColor: mode ? CURRENT_COLOR_THEME : COLORS.white,
           paddingVertical: 10,
@@ -146,7 +136,7 @@ const Footer = ({ timer, handleModeChange }) => {
 
       <TouchableOpacity
         activeOpacity={1}
-        onPress={() => handlePress(0)}
+        onPress={() => handleModeChange(0)}
         style={{
           backgroundColor: !mode ? CURRENT_COLOR_THEME : COLORS.white,
           paddingVertical: 10,
