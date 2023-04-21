@@ -7,7 +7,6 @@ import {
 } from "@expo-google-fonts/poppins"
 
 import Navigation from "./navigation"
-import { StatusBar } from "expo-status-bar"
 import { Provider } from "react-redux"
 
 import { store } from "./store/store"

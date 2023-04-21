@@ -7,6 +7,7 @@ import { Audio } from "expo-av"
 import { COLORS } from "../constants"
 import { useNavigation } from "@react-navigation/native"
 import { useSelector } from "react-redux"
+import i18next from "../i18next"
 
 const editTime = (time) => {
   const seconds = (time % 60).toString()
@@ -131,7 +132,9 @@ const Footer = ({ timer, handleModeChange, mode }) => {
           marginHorizontal: 10,
         }}
       >
-        <Text style={{ color: mode ? COLORS.white : COLORS.dark }}>Fokus</Text>
+        <Text style={{ color: mode ? COLORS.white : COLORS.dark }}>
+          {i18next.t("focus")}
+        </Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -149,7 +152,7 @@ const Footer = ({ timer, handleModeChange, mode }) => {
         }}
       >
         <Text style={{ color: !mode ? COLORS.white : COLORS.dark }}>
-          Fasilə
+          {i18next.t("break")}
         </Text>
       </TouchableOpacity>
     </View>
@@ -203,7 +206,7 @@ const Body = ({ timer, time, startTimer, stopTimer, resetTimer }) => (
                 fontFamily: "Poppins_400Regular",
               }}
             >
-              Dayandır
+              {i18next.t("stop")}
             </Text>
           </TouchableOpacity>
         ) : (
@@ -219,7 +222,7 @@ const Body = ({ timer, time, startTimer, stopTimer, resetTimer }) => (
                   fontFamily: "Poppins_400Regular",
                 }}
               >
-                Başla
+                {i18next.t("start")}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -233,7 +236,7 @@ const Body = ({ timer, time, startTimer, stopTimer, resetTimer }) => (
                   fontFamily: "Poppins_400Regular",
                 }}
               >
-                Sıfırla
+                {i18next.t("reset")}
               </Text>
             </TouchableOpacity>
           </View>

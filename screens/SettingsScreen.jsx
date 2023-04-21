@@ -15,6 +15,8 @@ import { useNavigation } from "@react-navigation/native"
 import { useSelector, useDispatch } from "react-redux"
 import { update } from "../store/actions"
 
+import i18next from "../i18next"
+
 let CURRENT_COLOR_THEME = COLORS.dark
 let FOCUS, BREAK
 
@@ -66,13 +68,13 @@ const Body = ({ updateTimer, setFocus, setBreak, _focus, _break }) => {
   return (
     <View style={{ paddingHorizontal: 20, marginTop: 10 }}>
       <InputField
-        name="Fokus"
+        name={i18next.t("focus")}
         placeholder={FOCUS}
         onChange={setFocus}
         value={_focus}
       />
       <InputField
-        name="Fasilə"
+        name={i18next.t("break")}
         placeholder={BREAK}
         onChange={setBreak}
         value={_break}
@@ -103,7 +105,7 @@ const Body = ({ updateTimer, setFocus, setBreak, _focus, _break }) => {
             fontSize: 16,
           }}
         >
-          Yadda Saxla
+          {i18next.t("save")}
         </Text>
       </Pressable>
 
@@ -118,7 +120,7 @@ const Body = ({ updateTimer, setFocus, setBreak, _focus, _break }) => {
             textAlign: "center",
           }}
         >
-          Rəng Sxemi
+          {i18next.t("color_theme")}
         </Text>
         <View
           style={{
@@ -247,7 +249,7 @@ const Header = ({ navigation }) => (
         color: CURRENT_COLOR_THEME,
       }}
     >
-      Ayarlar
+      {i18next.t("settings")}
     </Text>
 
     {/* For Centering */}
